@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự Đoán Xu Hướng Cổ Phiếu</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f8fb;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        h1, h2 {
+            color: #003366;
+            font-weight: bold;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin-top: 50px;
+            position: relative;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #003366;
+        }
+        .btn-primary {
+            background-color: #003366;
+            border-color: #003366;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #001f33;
+            border-color: #001f33;
+            transform: scale(1.05);
+        }
+        .btn-success {
+            width: 100%;
+            background-color: #28a745;
+            border-color: #28a745;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+            transform: scale(1.05);
+        }
+        .table-responsive {
+            margin-top: 20px;
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .mt-5 {
+            margin-top: 40px;
+        }
+        .mt-4 {
+            margin-top: 30px;
+        }
+        .text-center {
+            color: #003366;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #003366;
+            box-shadow: 0 0 8px rgba(0, 51, 102, 0.3);
+        }
+
+        /* Spinner loading container */
+        .spinner-container {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 0.3em;
+            color: #003366;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Dự Đoán Xu Hướng Cổ Phiếu</h1>
+        <form method="POST" action="/" class="mt-4">
+            <div class="form-group">
+                <label for="stock">Chọn Mã Cổ Phiếu:</label>
+                <select class="form-control" id="stock" name="stock">
+                    <option value="AAPL">Apple (AAPL)</option>
+                    <option value="TSLA">Tesla (TSLA)</option>
+                    <option value="MSFT">Microsoft (MSFT)</option>
+                    <option value="AMZN">Amazon (AMZN)</option>
+                    <option value="GOOGL">Google (GOOGL)</option>
+                    <option value="FB">Facebook (FB)</option>
+                    <option value="NFLX">Netflix (NFLX)</option>
+                    <option value="NVDA">Nvidia (NVDA)</option>
+                    <option value="GOOG">Google (GOOG)</option>
+                    <option value="VNM">Vinamilk (VNM)</option>
+                    <option value="VCB">Vietcombank (VCB)</option>
+                    <option value="GEX">Gelex (GEX)</option>
+                    <option value="MSN">Masan Group (MSN)</option>
+                    <option value="LVMH">LVMH (LVMH)</option>
+                    <option value="BMW">BMW (BMW)</option>
+                    <option value="TSM">TSMC (TSM)</option>
+                    <option value="DIS">Disney (DIS)</option>
+                    <option value="BABA">Alibaba (BABA)</option>
+                    <option value="AMD">AMD (AMD)</option>
+                    <option value="SNAP">Snapchat (SNAP)</option>
+                    <option value="TWTR">Twitter (TWTR)</option>
+                    <option value="NKE">Nike (NKE)</option>
+                    <option value="SPG">Simon Property Group (SPG)</option>
+                    <option value="WMT">Walmart (WMT)</option>
+                    <option value="KO">Coca-Cola (KO)</option>
+                    <option value="PEP">PepsiCo (PEP)</option>
+                    <option value="UNH">UnitedHealth Group (UNH)</option>
+                    <option value="JPM">JP Morgan (JPM)</option>
+                    <option value="GE">General Electric (GE)</option>
+                    <option value="BA">Boeing (BA)</option>
+                    <option value="CVX">Chevron (CVX)</option>
+                    <option value="EXXON">Exxon Mobil (EXXON)</option>
+                    <option value="BNS">Bank of Nova Scotia (BNS)</option>
+                    <option value="CSCO">Cisco Systems (CSCO)</option>
+                    <option value="MA">Mastercard (MA)</option>
+                    <option value="PYPL">PayPal (PYPL)</option>
+                    <option value="GS">Goldman Sachs (GS)</option>
+                    <option value="NOK">Nokia (NOK)</option>
+                    <option value="INTU">Intuit (INTU)</option>
+                    <option value="CSX">CSX Corporation (CSX)</option>
+                    <option value="NEE">NextEra Energy (NEE)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Dự Đoán</button>
+        </form>
+
+        <!-- Spinner loading container -->
+        <div id="spinner-container" class="spinner-container">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        {% if stock_symbol %}
+        <h3 class="mt-4">Bạn đang xem cổ phiếu của: <strong>{{ stock_symbol }}</strong></h3>
+        {% endif %}
+
+        {% if predicted_price %}
+        <h2 class="mt-5">Dự Đoán Giá Cổ Phiếu Ngày Hôm Sau:</h2>
+        <p><strong>{{ predicted_price }}</strong> USD</p>
+        {% endif %}
+
+        {% if plot_path_ema_20_50 %}
+        <h2 class="mt-5">Giá Đóng Cửa So Với Thời Gian (EMA 20 và EMA 50 Ngày)</h2>
+        <img src="{{ plot_path_ema_20_50 }}" class="img-fluid" alt="EMA 20 & 50">
+
+        <h2 class="mt-5">Giá Đóng Cửa So Với Thời Gian (EMA 100 và EMA 200 Ngày)</h2>
+        <img src="{{ plot_path_ema_100_200 }}" class="img-fluid" alt="EMA 100 & 200">
+
+        <h2 class="mt-5">Dự Đoán So Với Xu Hướng Gốc</h2>
+        <img src="{{ plot_path_prediction }}" class="img-fluid" alt="Dự Đoán">
+        {% endif %}
+
+        <h2 class="mt-5">Mô Tả Dữ Liệu:</h2>
+        <div class="table-responsive">
+            {{ data_desc|safe }}
+        </div>
+
+        {% if dataset_link %}
+        <h3 class="mt-5">Tải Dữ Liệu CSV:</h3>
+        <a href="{{ dataset_link }}" class="btn btn-success">Tải về</a>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Show spinner while waiting for the result
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('spinner-container').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
