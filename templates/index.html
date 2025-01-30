@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dự Đoán Xu Hướng Cổ Phiếu</title>
+    <title>Stock Price Prediction</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -11,11 +12,14 @@
             font-family: 'Arial', sans-serif;
             color: #333;
         }
-        h1, h2 {
+
+        h1,
+        h2 {
             color: #003366;
             font-weight: bold;
             text-align: center;
         }
+
         .container {
             background-color: white;
             padding: 40px;
@@ -25,10 +29,12 @@
             margin-top: 50px;
             position: relative;
         }
+
         .form-group label {
             font-weight: bold;
             color: #003366;
         }
+
         .btn-primary {
             background-color: #003366;
             border-color: #003366;
@@ -39,11 +45,13 @@
             border-radius: 8px;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
+
         .btn-primary:hover {
             background-color: #001f33;
             border-color: #001f33;
             transform: scale(1.05);
         }
+
         .btn-success {
             width: 100%;
             background-color: #28a745;
@@ -54,11 +62,13 @@
             border-radius: 8px;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
+
         .btn-success:hover {
             background-color: #218838;
             border-color: #1e7e34;
             transform: scale(1.05);
         }
+
         .table-responsive {
             margin-top: 20px;
             background-color: #fafafa;
@@ -66,21 +76,26 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
+
         .img-fluid {
             max-width: 100%;
             height: auto;
             border-radius: 10px;
             margin-bottom: 20px;
         }
+
         .mt-5 {
             margin-top: 40px;
         }
+
         .mt-4 {
             margin-top: 30px;
         }
+
         .text-center {
             color: #003366;
         }
+
         .form-control {
             border-radius: 8px;
             padding: 12px;
@@ -88,6 +103,7 @@
             border: 1px solid #ddd;
             transition: border-color 0.3s ease;
         }
+
         .form-control:focus {
             border-color: #003366;
             box-shadow: 0 0 8px rgba(0, 51, 102, 0.3);
@@ -106,60 +122,105 @@
             border-width: 0.3em;
             color: #003366;
         }
+
+        .predicted-price-container {
+            background-color: #f4f8fb;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .predicted-heading {
+            font-size: 30px;
+            color: #003366;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .predicted-price {
+            font-size: 50px;
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .display-price {
+            font-size: 70px;
+            color: #003366;
+        }
+
+        .currency {
+            font-size: 30px;
+            color: #003366;
+            font-weight: normal;
+        }
+
+        .autocomplete-items {
+            border: 1px solid #d4d4d4;
+            border-top: none;
+            z-index: 99;
+            position: absolute;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: white;
+            width: 90%;
+            border-radius: 5px;
+            /* Bo tròn góc */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            /* Bóng đổ nhẹ */
+            transition: box-shadow 0.3s ease;
+        }
+
+        .autocomplete-items div {
+            padding: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            /* Thêm kích thước font cho dễ đọc */
+            color: #333;
+            transition: background-color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        /* Thêm hiệu ứng khi hover */
+        .autocomplete-items div:hover {
+            background-color: #f0f0f0;
+            padding-left: 20px;
+            /* Di chuyển mục gợi ý về phía bên trái khi hover */
+        }
+
+        /* Mục gợi ý đang được chọn */
+        .autocomplete-active {
+            background-color: #ddd;
+            padding-left: 20px;
+            /* Di chuyển mục gợi ý về phía bên trái khi chọn */
+        }
+
+        /* Thêm hiệu ứng cho input khi focus */
+        #stock:focus {
+            outline: none;
+            border-color: #5b9bd5;
+            box-shadow: 0 0 5px rgba(91, 155, 213, 0.5);
+            /* Thêm hiệu ứng sáng khi focus */
+        }
     </style>
 </head>
+
 <body>
     <div class="container mt-5">
-        <h1>Dự Đoán Xu Hướng Cổ Phiếu</h1>
+        <h1>Dự Đoán Giá Cổ Phiếu</h1>
         <form method="POST" action="/" class="mt-4">
             <div class="form-group">
                 <label for="stock">Chọn Mã Cổ Phiếu:</label>
-                <select class="form-control" id="stock" name="stock">
-                    <option value="AAPL">Apple (AAPL)</option>
-                    <option value="TSLA">Tesla (TSLA)</option>
-                    <option value="MSFT">Microsoft (MSFT)</option>
-                    <option value="AMZN">Amazon (AMZN)</option>
-                    <option value="GOOGL">Google (GOOGL)</option>
-                    <option value="FB">Facebook (FB)</option>
-                    <option value="NFLX">Netflix (NFLX)</option>
-                    <option value="NVDA">Nvidia (NVDA)</option>
-                    <option value="GOOG">Google (GOOG)</option>
-                    <option value="VNM">Vinamilk (VNM)</option>
-                    <option value="VCB">Vietcombank (VCB)</option>
-                    <option value="GEX">Gelex (GEX)</option>
-                    <option value="MSN">Masan Group (MSN)</option>
-                    <option value="LVMH">LVMH (LVMH)</option>
-                    <option value="BMW">BMW (BMW)</option>
-                    <option value="TSM">TSMC (TSM)</option>
-                    <option value="DIS">Disney (DIS)</option>
-                    <option value="BABA">Alibaba (BABA)</option>
-                    <option value="AMD">AMD (AMD)</option>
-                    <option value="SNAP">Snapchat (SNAP)</option>
-                    <option value="TWTR">Twitter (TWTR)</option>
-                    <option value="NKE">Nike (NKE)</option>
-                    <option value="SPG">Simon Property Group (SPG)</option>
-                    <option value="WMT">Walmart (WMT)</option>
-                    <option value="KO">Coca-Cola (KO)</option>
-                    <option value="PEP">PepsiCo (PEP)</option>
-                    <option value="UNH">UnitedHealth Group (UNH)</option>
-                    <option value="JPM">JP Morgan (JPM)</option>
-                    <option value="GE">General Electric (GE)</option>
-                    <option value="BA">Boeing (BA)</option>
-                    <option value="CVX">Chevron (CVX)</option>
-                    <option value="EXXON">Exxon Mobil (EXXON)</option>
-                    <option value="BNS">Bank of Nova Scotia (BNS)</option>
-                    <option value="CSCO">Cisco Systems (CSCO)</option>
-                    <option value="MA">Mastercard (MA)</option>
-                    <option value="PYPL">PayPal (PYPL)</option>
-                    <option value="GS">Goldman Sachs (GS)</option>
-                    <option value="NOK">Nokia (NOK)</option>
-                    <option value="INTU">Intuit (INTU)</option>
-                    <option value="CSX">CSX Corporation (CSX)</option>
-                    <option value="NEE">NextEra Energy (NEE)</option>
-                </select>
+                <input class="form-control" id="stock" name="stock" type="text" placeholder="Tìm kiếm mã cổ phiếu...">
+                <div id="autocomplete-list" class="autocomplete-items"></div>
             </div>
-            <button type="submit" class="btn btn-primary">Dự Đoán</button>
+            <button type="submit" class="btn btn-primary mt-4">Dự Đoán</button>
         </form>
+
+        <p id="prediction-time" class="text-center mt-3" style="display: none; font-size: 18px; color: #003366;">
+            Kết quả đang được xử lý, vui lòng chờ trong khoảng 30 giây...
+        </p>        
 
         <!-- Spinner loading container -->
         <div id="spinner-container" class="spinner-container">
@@ -173,11 +234,23 @@
         {% endif %}
 
         {% if predicted_price %}
-        <h2 class="mt-5">Dự Đoán Giá Cổ Phiếu Ngày Hôm Sau:</h2>
-        <p><strong>{{ predicted_price }}</strong> USD</p>
+        <div class="predicted-price-container text-center mt-5">
+            <h2 class="predicted-heading">Dự Đoán Giá Cổ Phiếu Ngày Hôm Sau:</h2>
+            <p class="predicted-price">
+                <strong class="display-price" style="color: #22a340; font-size: 85%; font-weight: bold;">
+                    {{ predicted_price }} <span class="currency" style="font-size: 75%;">USD</span>
+                </strong>
+            </p>
+        </div>
         {% endif %}
 
         {% if plot_path_ema_20_50 %}
+        <h2 class="mt-5">Biểu Đồ RSI</h2>
+        <img src="{{ url_for('static', filename='rsi_chart.png') }}" alt="RSI Chart" class="img-fluid">
+
+        <h2 class="mt-5">Biểu Đồ MACD</h2>
+        <img src="{{ url_for('static', filename='macd_chart.png') }}" alt="MACD Chart" class="img-fluid">
+
         <h2 class="mt-5">Giá Đóng Cửa So Với Thời Gian (EMA 20 và EMA 50 Ngày)</h2>
         <img src="{{ plot_path_ema_20_50 }}" class="img-fluid" alt="EMA 20 & 50">
 
@@ -186,27 +259,379 @@
 
         <h2 class="mt-5">Dự Đoán So Với Xu Hướng Gốc</h2>
         <img src="{{ plot_path_prediction }}" class="img-fluid" alt="Dự Đoán">
+
+        <h2 class="mt-5">Giá Đóng Cửa So Với Thời Gian (EMA 20 và EMA 50 Tuần)</h2>
+        <img src="{{ plot_path_ema_weekly }}" class="img-fluid" alt="EMA 20 & 50 Tuần">
         {% endif %}
 
+        {% if data_desc %}
         <h2 class="mt-5">Mô Tả Dữ Liệu:</h2>
         <div class="table-responsive">
             {{ data_desc|safe }}
         </div>
+        {% endif %}
 
         {% if dataset_link %}
-        <h3 class="mt-5">Tải Dữ Liệu CSV:</h3>
-        <a href="{{ dataset_link }}" class="btn btn-success">Tải về</a>
+        <h3 class="mt-5">Liên kết Đến Trang Yahoo Finance</h3>
+        <a href="{{ dataset_link }}" class="btn btn-success">Chuyển Đến Trang Yahoo Finance: <strong>{{ stock_symbol
+                }}</strong></a>
         {% endif %}
+
+        <div class="alert alert-warning mt-5" role="alert">
+            <h4 class="alert-heading"><strong>Lưu Ý Quan Trọng:</strong></h4>
+            <p id="short-warning">
+                Những dự đoán trên được cung cấp chỉ nhằm mục đích tham khảo và không đảm bảo bất kỳ kết quả đầu tư
+                nào.<span id="dots">..</span>
+                <span id="more-text" style="display: none;">
+                    Giá cổ phiếu có thể biến động mạnh do các yếu tố như khủng hoảng kinh tế, dịch bệnh, biến động chính
+                    trị hoặc các sự kiện không lường trước khác. Vui lòng cân nhắc kỹ lưỡng và tự chịu trách nhiệm với
+                    các quyết định đầu tư của mình. Chúng tôi không chịu trách nhiệm cho bất kỳ tổn thất nào phát sinh
+                    từ việc sử dụng các dự đoán này.
+                </span>
+            </p>
+            <button id="toggle-button" class="btn btn-link p-0" onclick="toggleWarning()">Xem thêm</button>
+        </div>
+
+        <div>
+            <a href="https://www.facebook.com/nhat.quang.482906" target="_blank" style="display: inline-flex; align-items: center; padding: 10px 20px; 
+                  background-color: #003366; color: white; text-decoration: none; 
+                  font-size: 16px; font-weight: bold; border-radius: 30px; 
+                  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;">
+                <i class="fab fa-facebook-f" style="margin-right: 5px; font-size: 18px;"></i>
+                Liên Hệ
+            </a>
+        </div>
+
+        <script>
+            function toggleWarning() {
+                var dots = document.getElementById("dots");
+                var moreText = document.getElementById("more-text");
+                var button = document.getElementById("toggle-button");
+
+                if (dots.style.display === "none") {
+                    dots.style.display = "inline";
+                    moreText.style.display = "none";
+                    button.innerText = "Xem thêm";
+                } else {
+                    dots.style.display = "none";
+                    moreText.style.display = "inline";
+                    button.innerText = "Thu gọn";
+                }
+            }
+
+            document.querySelector('.btn-primary').addEventListener('click', function () {
+                document.getElementById('prediction-time').style.display = 'block';
+            });
+        </script>
     </div>
+
+    <script>
+        // Danh sách mã cổ phiếu và tên công ty
+        const stockSymbols = [
+            { name: "Snowflake", symbol: "SNOW" },
+            { name: "Zomedica", symbol: "ZOM" },
+            { name: "Tilray", symbol: "TLRY" },
+            { name: "FuboTV", symbol: "FUBO" },
+            { name: "Beyond Meat", symbol: "BYND" },
+            { name: "Snapchat", symbol: "SNAP" },
+            { name: "Apple", symbol: "AAPL" },
+            { name: "Adobe", symbol: "ADBE" },
+            { name: "Amazon", symbol: "AMZN" },
+            { name: "Roku", symbol: "ROKU" },
+            { name: "Tesla", symbol: "TSLA" },
+            { name: "Facebook", symbol: "FB" },
+            { name: "Google", symbol: "GOOGL" },
+            { name: "Twilio", symbol: "TWLO" },
+            { name: "Microsoft", symbol: "MSFT" },
+            { name: "Netflix", symbol: "NFLX" },
+            { name: "Nvidia", symbol: "NVDA" },
+            { name: "Zscaler", symbol: "ZS" },
+            { name: "Twitter", symbol: "TWTR" },
+            { name: "Salesforce", symbol: "CRM" },
+            { name: "Cloudflare", symbol: "NET" },
+            { name: "Intel", symbol: "INTC" },
+            { name: "Elastic", symbol: "ESTC" },
+            { name: "Uber", symbol: "UBER" },
+            { name: "Spotify", symbol: "SPOT" },
+            { name: "Pinterest", symbol: "PINS" },
+            { name: "PayPal", symbol: "PYPL" },
+            { name: "DoorDash", symbol: "DASH" },
+            { name: "Alibaba", symbol: "BABA" },
+            { name: "Zoom", symbol: "ZM" },
+            { name: "Nike", symbol: "NKE" },
+            { name: "JFrog", symbol: "FROG" },
+            { name: "Illumina", symbol: "ILMN" },
+            { name: "Match Group", symbol: "MTCH" },
+            { name: "Coca-Cola", symbol: "KO" },
+            { name: "Walmart", symbol: "WMT" },
+            { name: "Disney", symbol: "DIS" },
+            { name: "CarGurus", symbol: "CARG" },
+            { name: "Johnson & Johnson", symbol: "JNJ" },
+            { name: "Berkshire Hathaway", symbol: "BRK-A" },
+            { name: "Affirm", symbol: "AFRM" },
+            { name: "Robinhood", symbol: "HOOD" },
+            { name: "Instacart", symbol: "CART" },
+            { name: "AppLovin", symbol: "APP" },
+            { name: "Asana", symbol: "ASAN" },
+            { name: "Bill.com", symbol: "BILL" },
+            { name: "Visa", symbol: "V" },
+            { name: "Mastercard", symbol: "MA" },
+            { name: "Carvana", symbol: "CVNA" },
+            { name: "Chewy", symbol: "CHWY" },
+            { name: "Procter & Gamble", symbol: "PG" },
+            { name: "Pfizer", symbol: "PFE" },
+            { name: "ExxonMobil", symbol: "XOM" },
+            { name: "Chevron", symbol: "CVX" },
+            { name: "PepsiCo", symbol: "PEP" },
+            { name: "McDonald's", symbol: "MCD" },
+            { name: "Lockheed Martin", symbol: "LMT" },
+            { name: "Caterpillar", symbol: "CAT" },
+            { name: "3M", symbol: "MMM" },
+            { name: "General Electric", symbol: "GE" },
+            { name: "Vingroup", symbol: "VIC" },
+            { name: "Vinamilk", symbol: "VNM" },
+            { name: "Masan Group", symbol: "MSN" },
+            { name: "Techcombank", symbol: "TCB" },
+            { name: "BIDV", symbol: "BID" },
+            { name: "Sacombank", symbol: "STB" },
+            { name: "Hòa Phát Group", symbol: "HPG" },
+            { name: "Vinhomes", symbol: "VHM" },
+            { name: "PV Gas", symbol: "GAS" },
+            { name: "ACB", symbol: "ACB" },
+            { name: "FPT Corporation", symbol: "FPT.VN" },
+            { name: "Bao Viet Holdings", symbol: "BVH" },
+            { name: "Hoa Sen Group", symbol: "HSG" },
+            { name: "Peloton", symbol: "PTON" },
+            { name: "Mascope", symbol: "MSC" },
+            { name: "Tập đoàn Xăng dầu Petrolimex", symbol: "PLX" },
+            { name: "Đạm Phú Mỹ", symbol: "DPM" },
+            { name: "Genco 3", symbol: "GEE" },
+            { name: "Samsung", symbol: "005930.KS" },
+            { name: "Toyota", symbol: "7203.T" },
+            { name: "Honda", symbol: "7267.T" },
+            { name: "Siemens", symbol: "SIE.DE" },
+            { name: "Veeva Systems", symbol: "VEEV" },
+            { name: "BMW", symbol: "BMW.DE" },
+            { name: "Splunk", symbol: "SPLK" },
+            { name: "Volkswagen", symbol: "VOW3.DE" },
+            { name: "Royal Dutch Shell", symbol: "RDS.A" },
+            { name: "BP", symbol: "BP" },
+            { name: "Nutanix", symbol: "NTNX" },
+            { name: "TotalEnergies", symbol: "TOTF.PA" },
+            { name: "Nestlé", symbol: "NESN.SW" },
+            { name: "Unilever", symbol: "ULVR.L" },
+            { name: "L’Oréal", symbol: "OR.PA" },
+            { name: "Novartis", symbol: "NOVN.SW" },
+            { name: "GlaxoSmithKline", symbol: "GSK" },
+            { name: "AstraZeneca", symbol: "AZN.L" },
+            { name: "HSBC", symbol: "HSBC" },
+            { name: "Barclays", symbol: "BARC.L" },
+            { name: "Goldman Sachs", symbol: "GS" },
+            { name: "JPMorgan Chase", symbol: "JPM" },
+            { name: "Morgan Stanley", symbol: "MS" },
+            { name: "Deutsche Bank", symbol: "DB" },
+            { name: "Dropbox", symbol: "DBX" },
+            { name: "American Express", symbol: "AXP" },
+            { name: "XPeng", symbol: "XPEV" },
+            { name: "Citigroup", symbol: "C" },
+            { name: "AT&T", symbol: "T" },
+            { name: "Pure Storage", symbol: "PSTG" },
+            { name: "Coupa Software", symbol: "COUP" },
+            { name: "Bristol-Myers Squibb", symbol: "BMY" },
+            { name: "Cigna", symbol: "CI" },
+            { name: "Cisco", symbol: "CSCO" },
+            { name: "ConocoPhillips", symbol: "COP" },
+            { name: "Costco", symbol: "COST" },
+            { name: "CVS Health", symbol: "CVS" },
+            { name: "Danaher", symbol: "DHR" },
+            { name: "Dow Inc.", symbol: "DOW" },
+            { name: "General Motors", symbol: "GM" },
+            { name: "Hershey", symbol: "HSY" },
+            { name: "Home Depot", symbol: "HD" },
+            { name: "DocuSign", symbol: "DOCU" },
+            { name: "Nio", symbol: "NIO" },
+            { name: "IBM", symbol: "IBM" },
+            { name: "Kroger", symbol: "KR" },
+            { name: "Medtronic", symbol: "MDT" },
+            { name: "Merck", symbol: "MRK" },
+            { name: "Marvell Technology", symbol: "MRVL" },
+            { name: "Raytheon Technologies", symbol: "RTX" },
+            { name: "Schlumberger", symbol: "SLB" },
+            { name: "Starbucks", symbol: "SBUX" },
+            { name: "Texas Instruments", symbol: "TXN" },
+            { name: "Xiaomi", symbol: "1810.HK" },
+            { name: "UnitedHealth Group", symbol: "UNH" },
+            { name: "Verizon", symbol: "VZ" },
+            { name: "Upstart", symbol: "UPST" },
+            { name: "Waste Management", symbol: "WM" },
+            { name: "Workday", symbol: "WDAY" },
+            { name: "Zimmer Biomet", symbol: "ZBH" },
+            { name: "Airbnb", symbol: "ABNB" },
+            { name: "Vietcombank", symbol: "VCB" },
+            { name: "VietinBank", symbol: "CTG" },
+            { name: "SABeco", symbol: "SAB" },
+            { name: "Mobile World Investment", symbol: "MWG" },
+            { name: "T-Mobile", symbol: "TMUS" },
+            { name: "PetroVietnam Gas", symbol: "GAS" },
+            { name: "Tập đoàn Đầu tư và Phát triển Công nghiệp – IDI", symbol: "IDI" },
+            { name: "Solid Power", symbol: "SLDP" },
+            { name: "CTCP Bóng đèn Phích nước Rạng Đông", symbol: "RAD" },
+            { name: "SoFi Technologies", symbol: "SOFI" },
+            { name: "Vroom", symbol: "VRM" },
+            { name: "Sức khỏe Việt Nam", symbol: "VSC" },
+            { name: "Coupang", symbol: "CPNG" },
+            { name: "Dầu khí PVN", symbol: "PVD" },
+            { name: "Okta", symbol: "OKTA" },
+            { name: "Vinasoy", symbol: "VNS" },
+            { name: "FLC Group", symbol: "FLC" },
+            { name: "Tập đoàn Hòa Phát", symbol: "HPG" },
+            { name: "Sony", symbol: "6758.T" },
+            { name: "Hewlett-Packard", symbol: "HPQ" },
+            { name: "SAP", symbol: "SAP" },
+            { name: "Toast", symbol: "TOST" },
+            { name: "Nokia", symbol: "NOK" },
+            { name: "Bumble", symbol: "BMBL" },
+            { name: "Shopify", symbol: "SHOP" },
+            { name: "Shoprite", symbol: "SHP" },
+            { name: "Lucid Motors", symbol: "LCID" },
+            { name: "Hyundai", symbol: "005380.KS" },
+            { name: "Ferrari", symbol: "RACE" },
+            { name: "Ford", symbol: "F" },
+            { name: "Rivian", symbol: "RIVN" },
+            { name: "Wish", symbol: "WISH" },
+            { name: "AMD", symbol: "AMD" },
+            { name: "Nintendo", symbol: "7974.T" },
+            { name: "Bandai Namco", symbol: "7832.T" },
+            { name: "Asus", symbol: "2357.TW" },
+            { name: "Etsy", symbol: "ETSY" },
+            { name: "Warby Parker", symbol: "WRBY" },
+            { name: "Huawei", symbol: "HWT.UL" },
+            { name: "The Trade Desk", symbol: "TTD" },
+            { name: "Atlassian", symbol: "TEAM" },
+            { name: "Lenovo", symbol: "0992.HK" },
+            { name: "Dell Technologies", symbol: "DELL" },
+            { name: "Roblox", symbol: "RBLX" },
+            { name: "Lyft", symbol: "LYFT" },
+            { name: "Rigetti Computing", symbol: "RGTI" },
+            { name: "Lemonade", symbol: "LMND" },
+            { name: "DraftKings", symbol: "DKNG" },
+            { name: "QuantumScape", symbol: "QS" },
+            { name: "Moderna", symbol: "MRNA" },
+            { name: "Plug Power", symbol: "PLUG" },
+            { name: "Oatly", symbol: "OTLY" },
+            { name: "Unity Software", symbol: "U" },
+            { name: "Grubhub", symbol: "GRUB" },
+            { name: "Datadog", symbol: "DDOG" },
+            { name: "Nikola", symbol: "NKLA" },
+            { name: "C3.ai", symbol: "AI" },
+            { name: "Skillz", symbol: "SKLZ" },
+            { name: "Palantir Technologies", symbol: "PLTR" },
+            { name: "Astra Space", symbol: "ASTR" },
+            { name: "ChargePoint", symbol: "CHPT" },
+            { name: "Virgin Galactic", symbol: "SPCE" },
+            { name: "MongoDB", symbol: "MDB" },
+            { name: "Luminar Technologies", symbol: "LAZR" },
+            { name: "Fisker", symbol: "FSR" },
+            { name: "Mercedes-Benz Group", symbol: "MBG.DE" }
+
+        ];
+
+        // Hàm gợi ý
+        function autocomplete(inp, arr) {
+            let currentFocus;
+
+            inp.addEventListener("input", function () {
+                let a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) return false;
+                currentFocus = -1;
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                for (i = 0; i < arr.length; i++) {
+                    if (arr[i].symbol.toUpperCase().substr(0, val.length).toUpperCase() == val.toUpperCase() ||
+                        arr[i].name.toUpperCase().substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        b = document.createElement("DIV");
+                        b.innerHTML = "<strong>" + arr[i].symbol.substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].symbol.substr(val.length);
+                        b.innerHTML += " (" + arr[i].name + ")";
+                        b.innerHTML += "<input type='hidden' value='" + arr[i].symbol + "'>";
+                        b.addEventListener("click", function () {
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+
+                // Nếu có gợi ý, cuộn đến phần đầu tiên
+                if (a) {
+                    a.scrollTop = 0;
+                    a.firstChild && a.firstChild.classList.add('autocomplete-active');
+                }
+            });
+
+            function closeAllLists(elmnt) {
+                let x = document.getElementsByClassName("autocomplete-items");
+                for (let i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+
+            inp.addEventListener("keydown", function (e) {
+                let x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {  // Mũi tên xuống
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode == 38) {  // Mũi tên lên
+                    currentFocus--;
+                    addActive(x);
+                } else if (e.keyCode == 13) {  // Enter
+                    e.preventDefault();
+                    if (currentFocus > -1 && x) x[currentFocus].click();
+                }
+            });
+
+            function addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+
+            function removeActive(x) {
+                for (let i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        autocomplete(document.getElementById("stock"), stockSymbols);
+
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Show spinner while waiting for the result
-        document.querySelector('form').addEventListener('submit', function() {
+
+        document.querySelector('form').addEventListener('submit', function () {
             document.getElementById('spinner-container').style.display = 'block';
         });
     </script>
 </body>
+
+<footer class="text-center mt-5 py-3" font-size: 14px;>
+    © 2025 Stock Prediction Project. All rights reserved.
+</footer>
+
 </html>
